@@ -24,6 +24,16 @@ parser.add_argument("--logo-size",
     type=int,
     help="The maximum size of the logo after resizing. The logo's aspect ratio is maintained."
     )
+parser.add_argument("--fadein-duration",
+    default=.5,
+    type=float,
+    help="Duration in seconds of the fadein effect applied to the input video. A value of 0 would disable it"
+    )
+parser.add_argument("--fadeout-duration",
+    default=.5,
+    type=float,
+    help="Duration in seconds of the fadeout effect applied to the input video. A value of 0 would disable it"
+    )
 parser.add_argument("-o", "--out",
     help="The output filename. By default, this is the input file plus '.output'. Example 'input.output.mp4'"
     )
@@ -56,6 +66,8 @@ def debug_output():
     print("Intro Readable: " + str(intro_readable))
     print("Outro Readable: " + str(outro_readable))
     print("Logo Readable: " + str(logo_readable))
+    print("Fade in duration: {}".format(args.fadein_duration))
+    print("Fade out duration: {}".format(args.fadeout_duration))
     try:
         print("Input Video Size: {} x {}".format(w, h))
     except NameError:
@@ -153,6 +165,10 @@ if logo_exists == True and logo_readable == True:
 else:
     adjusted_input_video = input_video
 
+adjusted_input_video = (adjusted_input_video
+    .fadein(args.fadein_duration)
+    .fadeout(args.fadeout_duration)
+    )
 if args.debug:
     debug_output()
 
