@@ -6,8 +6,8 @@ parser = ArgumentParser(description="""
 Process a video file, optionally adding a logo, an intro and an outro.
     """)
 parser.add_argument("input", help="The video file to process.")
-parser.add_argument("--intro", 
-    default="intro.mp4", 
+parser.add_argument("--intro",
+    default="intro.mp4",
     help="The intro video file to use. By default, 'intro.mp4' is used."
     )
 parser.add_argument("--outro",
@@ -21,13 +21,13 @@ parser.add_argument("--logo",
 parser.add_argument("-o", "--out",
     help="The output filename. By default, this is the input file plus '.output'. Example 'input.output.mp4'"
     )
-parser.add_argument("--overwrite", 
+parser.add_argument("--overwrite",
     default=False,
     action="store_true",
     help="Overwrite output file if it exists."
     )
 parser.add_argument("-d", "--debug",
-    action="store_true", 
+    action="store_true",
     help="Output debugging information."
     )
 
