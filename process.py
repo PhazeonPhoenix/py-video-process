@@ -72,13 +72,13 @@ if args.debug:
     print("Output provided: " + str(output_provided))
     print("Output filename: " + output_filename)
     print("Input exists: " + str(input_exists))
+    print("Output Exists: " + str(output_exists))
     print("Intro exists: " + str(intro_exists))
     print("Outro exists: " + str(outro_exists))
     print("Logo exists: " + str(logo_exists))
     print("Intro Readable: " + str(intro_readable))
     print("Outro Readable: " + str(outro_readable))
     print("Logo Readable: " + str(logo_readable))
-    print("Output Exists: " + str(output_exists))
 
 if input_exists == False or input_readable == False:
     print()
