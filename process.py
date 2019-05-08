@@ -34,11 +34,35 @@ input_exists = os.path.exists(args.input)
 if input_exists == False:
     print(args.input + ' does not exist or is not readable. Please supply a readable input video.')
     sys.exit(1)
-
+# output_filename = 
 intro_exists = os.path.exists(args.intro)
 outro_exists = os.path.exists(args.outro)
 logo_exists = os.path.exists(args.logo)
 
+# ignore input ext as fudge for my habit of using mkv instead of MP4
+output_ext = '.mp4'
+# calculate Output...
+output_filename = args.out
+if output_filename:
+    output_provided = True
+    split_input = os.path.splitext(output_filename)
+    if len(split_input) > 1:
+        output_subname = "".join(split_input[:-1])
+    else :
+        # no functional difference
+        output_subname = output_filename
+    output_filename = output_path + output_subname + output_ext
+else:
+    output_provided = False
+    split_input = os.path.splitext(args.input)
+    if len(split_input) < 2:
+        output_subname = args.input
+    else :
+        # ignore input ext as fudge for my habit of using mkv instead of MP4
+        # no functional difference
+        output_subname = "".join(split_input[:-1])
+    output_filename = output_subname + ".output" + output_ext
+output_exists = os.path.exists(output_filename)
 intro_readable = os.access(args.intro, os.R_OK)
 outro_readable = os.access(args.outro, os.R_OK)
 logo_readable = os.access(args.logo, os.R_OK)
