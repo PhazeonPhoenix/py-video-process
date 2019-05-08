@@ -91,6 +91,11 @@ def debug_output():
         pass
 
     try:
+        print("outro Video Size: {} x {}".format(ow, oh))
+    except NameError:
+        pass
+
+    try:
         print("Logo original size: {} x {}".format(logow, logoh))
     except NameError:
         pass
@@ -185,6 +190,16 @@ adjusted_input_video = (adjusted_input_video
     .fadein(args.fadein_duration)
     .fadeout(args.fadeout_duration)
     )
+
+if outro_exists == True and outro_readable == True:
+    outro_video = VideoFileClip(args.outro)
+    ow,oh = outro_video.size
+    if w != ow or h != oh:
+        print()
+        print("The outro video '{}' is not the same size as the input video.".format(args.outro))
+        if args.debug:
+            debug_output()
+        sys.exit(1)
 if args.debug:
     debug_output()
 
