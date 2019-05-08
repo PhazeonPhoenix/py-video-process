@@ -33,6 +33,23 @@ parser.add_argument("-d", "--debug",
 
 args = parser.parse_args()
 
+def debug_output():
+    #print(args)
+    #args.input needs to check if there are two elements in list
+    #print(len(os.path.splitext(args.input)))
+    #print(os.path.splitext(args.input)[-1][1:])
+    print()
+    print("Output provided: " + str(output_provided))
+    print("Output filename: " + output_filename)
+    print("Input exists: " + str(input_exists))
+    print("Output Exists: " + str(output_exists))
+    print("Output Overwrite: " + str(args.overwrite))
+    print("Intro exists: " + str(intro_exists))
+    print("Outro exists: " + str(outro_exists))
+    print("Logo exists: " + str(logo_exists))
+    print("Intro Readable: " + str(intro_readable))
+    print("Outro Readable: " + str(outro_readable))
+    print("Logo Readable: " + str(logo_readable))
 input_exists = os.path.exists(args.input)
 
 intro_exists = os.path.exists(args.intro)
@@ -68,32 +85,22 @@ intro_readable = os.access(args.intro, os.R_OK)
 outro_readable = os.access(args.outro, os.R_OK)
 logo_readable = os.access(args.logo, os.R_OK)
 
-if args.debug:
-    #print(args)
-    #args.input needs to check if there are two elements in list
-    #print(len(os.path.splitext(args.input)))
-    #print(os.path.splitext(args.input)[-1][1:])
-
-    print("Output provided: " + str(output_provided))
-    print("Output filename: " + output_filename)
-    print("Input exists: " + str(input_exists))
-    print("Output Exists: " + str(output_exists))
-    print("Output Overwrite: " + str(args.overwrite))
-    print("Intro exists: " + str(intro_exists))
-    print("Outro exists: " + str(outro_exists))
-    print("Logo exists: " + str(logo_exists))
-    print("Intro Readable: " + str(intro_readable))
-    print("Outro Readable: " + str(outro_readable))
-    print("Logo Readable: " + str(logo_readable))
 
 if input_exists == False or input_readable == False:
     print()
     print("The input file '" + args.input + "' does not exist or is not readable. Please supply a readable input video.")
+    if args.debug:
+        debug_output()
     sys.exit(1)
 
 if output_exists == True and args.overwrite == False:
     print()
     print("The input file '" + output_filename + "' already exists. Use --overwrite, --output or -o to correct.")
+    if args.debug:
+        debug_output()
     sys.exit(1)
+
+if args.debug:
+    debug_output()
 
 input("Press Enter to continue...")
