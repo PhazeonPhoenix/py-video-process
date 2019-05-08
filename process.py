@@ -21,6 +21,11 @@ parser.add_argument("--logo",
 parser.add_argument("-o", "--out",
     help="The output filename. By default, this is the input file plus '.output'. Example 'input.output.mp4'"
     )
+parser.add_argument("--overwrite", 
+    default=False,
+    action="store_true",
+    help="Overwrite output file if it exists."
+    )
 parser.add_argument("-d", "--debug",
     action="store_true", 
     help="Output debugging information."
@@ -73,6 +78,7 @@ if args.debug:
     print("Output filename: " + output_filename)
     print("Input exists: " + str(input_exists))
     print("Output Exists: " + str(output_exists))
+    print("Output Overwrite: " + str(args.overwrite))
     print("Intro exists: " + str(intro_exists))
     print("Outro exists: " + str(outro_exists))
     print("Logo exists: " + str(logo_exists))
@@ -83,6 +89,11 @@ if args.debug:
 if input_exists == False or input_readable == False:
     print()
     print("The input file '" + args.input + "' does not exist or is not readable. Please supply a readable input video.")
+    sys.exit(1)
+
+if output_exists == True and args.overwrite == False:
+    print()
+    print("The input file '" + output_filename + "' already exists. Use --overwrite, --output or -o to correct.")
     sys.exit(1)
 
 input("Press Enter to continue...")
