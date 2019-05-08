@@ -21,7 +21,7 @@ parser.add_argument("--logo",
 parser.add_argument("-o", "--out",
     help="The output filename. By default, this is the input file plus '.output'. Example 'input.output.mp4'"
     )
-parser.add_argument("-d", "--debug", 
+parser.add_argument("-d", "--debug",
     action="store_true", 
     help="Output debugging information."
     )
