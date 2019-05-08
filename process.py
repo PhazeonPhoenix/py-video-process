@@ -143,6 +143,16 @@ if logo_exists == True and logo_readable == True:
     ratio = min(args.logo_size / logow, args.logo_size / logoh);
     logorw = math.ceil(logow * ratio)
     logorh = math.ceil(logoh * ratio)
+    logo = (ImageClip(args.logo)
+        .set_duration(input_video.duration)
+        # .resize(logorw, logorh)
+        .margin(right=20, bottom=20, opacity=0)
+        .set_position(('right', 'bottom'))
+    )
+    adjusted_input_video = CompositeVideoClip([input_video, logo])
+else:
+    adjusted_input_video = input_video
+
 if args.debug:
     debug_output()
 
