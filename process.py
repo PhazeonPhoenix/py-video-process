@@ -29,9 +29,7 @@ parser.add_argument("-d", "--debug",
 args = parser.parse_args()
 
 input_exists = os.path.exists(args.input)
-if input_exists == False:
-    print(args.input + ' does not exist or is not readable. Please supply a readable input video.')
-    sys.exit(1)
+
 intro_exists = os.path.exists(args.intro)
 outro_exists = os.path.exists(args.outro)
 logo_exists = os.path.exists(args.logo)
@@ -60,6 +58,7 @@ else:
         output_subname = "".join(split_input[:-1])
     output_filename = output_subname + ".output" + output_ext
 output_exists = os.path.exists(output_filename)
+input_readable = os.access(args.input, os.R_OK)
 intro_readable = os.access(args.intro, os.R_OK)
 outro_readable = os.access(args.outro, os.R_OK)
 logo_readable = os.access(args.logo, os.R_OK)
@@ -80,5 +79,10 @@ if args.debug:
     print("Outro Readable: " + str(outro_readable))
     print("Logo Readable: " + str(logo_readable))
     print("Output Exists: " + str(output_exists))
+
+if input_exists == False or input_readable == False:
+    print()
+    print("The input file '" + args.input + "' does not exist or is not readable. Please supply a readable input video.")
+    sys.exit(1)
 
 input("Press Enter to continue...")
