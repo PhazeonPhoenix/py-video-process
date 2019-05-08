@@ -51,7 +51,7 @@ if output_filename:
     else :
         # no functional difference
         output_subname = output_filename
-    output_filename = output_path + output_subname + output_ext
+    output_filename = output_subname + output_ext
 else:
     output_provided = False
     split_input = os.path.splitext(args.input)
