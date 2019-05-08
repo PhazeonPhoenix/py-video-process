@@ -27,8 +27,6 @@ parser.add_argument("-d", "--debug",
     )
 
 args = parser.parse_args()
-if args.debug:
-    print(args)
 
 input_exists = os.path.exists(args.input)
 if input_exists == False:
@@ -66,5 +64,22 @@ output_exists = os.path.exists(output_filename)
 intro_readable = os.access(args.intro, os.R_OK)
 outro_readable = os.access(args.outro, os.R_OK)
 logo_readable = os.access(args.logo, os.R_OK)
+
+if args.debug:
+    #print(args)
+    #args.input needs to check if there are two elements in list
+    #print(len(os.path.splitext(args.input)))
+    #print(os.path.splitext(args.input)[-1][1:])
+
+    print("Output provided: " + str(output_provided))
+    print("Output filename: " + output_filename)
+    print("Input exists: " + str(input_exists))
+    print("Intro exists: " + str(intro_exists))
+    print("Outro exists: " + str(outro_exists))
+    print("Logo exists: " + str(logo_exists))
+    print("Intro Readable: " + str(intro_readable))
+    print("Outro Readable: " + str(outro_readable))
+    print("Logo Readable: " + str(logo_readable))
+    print("Output Exists: " + str(output_exists))
 
 input("Press Enter to continue...")
