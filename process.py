@@ -32,9 +32,9 @@ input_exists = os.path.exists(args.input)
 if input_exists == False:
     print(args.input + ' does not exist or is not readable. Please supply a readable input video.')
     sys.exit(1)
-
-outro_exists = os.path.exists(args.outro)
+# output_filename = 
 intro_exists = os.path.exists(args.intro)
+outro_exists = os.path.exists(args.outro)
 logo_exists = os.path.exists(args.logo)
 
 # ignore input ext as fudge for my habit of using mkv instead of MP4
