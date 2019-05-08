@@ -1,4 +1,5 @@
 import sys
+import math
 from argparse import ArgumentParser
 from moviepy.editor import *
 
@@ -17,6 +18,11 @@ parser.add_argument("--outro",
 parser.add_argument("--logo",
     default="logo.png",
     help="The outro file to use. By default, 'outro.mp4' is used."
+    )
+parser.add_argument("--logo-size",
+    default=128,
+    type=int,
+    help="The maximum size of the logo after resizing. The logo's aspect ratio is maintained."
     )
 parser.add_argument("-o", "--out",
     help="The output filename. By default, this is the input file plus '.output'. Example 'input.output.mp4'"
@@ -50,6 +56,20 @@ def debug_output():
     print("Intro Readable: " + str(intro_readable))
     print("Outro Readable: " + str(outro_readable))
     print("Logo Readable: " + str(logo_readable))
+    try:
+        print("Input Video Size: {} x {}".format(w, h))
+    except NameError:
+        pass
+
+    try:
+        print("Logo original size: {} x {}".format(logow, logoh))
+    except NameError:
+        pass
+
+    try:
+        print("Logo resized size: {} x {}".format(logorw, logorh))
+    except NameError:
+        pass
 input_exists = os.path.exists(args.input)
 
 intro_exists = os.path.exists(args.intro)
@@ -100,6 +120,15 @@ if output_exists == True and args.overwrite == False:
         debug_output()
     sys.exit(1)
 
+input_video = VideoFileClip(args.input)
+w,h = input_video.size
+
+if logo_exists == True and logo_readable == True:
+    logo = ImageClip(args.logo)
+    logow,logoh = logo.size
+    ratio = min(args.logo_size / logow, args.logo_size / logoh);
+    logorw = math.ceil(logow * ratio)
+    logorh = math.ceil(logoh * ratio)
 if args.debug:
     debug_output()
 
