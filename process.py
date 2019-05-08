@@ -24,6 +24,16 @@ parser.add_argument("--logo-size",
     type=int,
     help="The maximum size of the logo after resizing. The logo's aspect ratio is maintained."
     )
+parser.add_argument("--logo-margin-bottom",
+    default=30,
+    type=int,
+    help="The amount of pixels to place between the bottom of the logo and the bottom of the input video."
+    )
+parser.add_argument("--logo-margin-right",
+    default=30,
+    type=int,
+    help="The amount of pixels to place between the right of the logo and the right of the input video."
+    )
 parser.add_argument("--fadein-duration",
     default=.5,
     type=float,
@@ -66,6 +76,8 @@ def debug_output():
     print("Intro Readable: " + str(intro_readable))
     print("Outro Readable: " + str(outro_readable))
     print("Logo Readable: " + str(logo_readable))
+    print("Logo Margin Right: {}".format(args.logo_margin_right))
+    print("Logo Margin Bottom: {}".format(args.logo_margin_bottom))
     print("Fade in duration: {}".format(args.fadein_duration))
     print("Fade out duration: {}".format(args.fadeout_duration))
     try:
@@ -158,7 +170,11 @@ if logo_exists == True and logo_readable == True:
     logo = (ImageClip(args.logo)
         .set_duration(input_video.duration)
         # .resize(logorw, logorh)
-        .margin(right=20, bottom=20, opacity=0)
+        .margin(
+            right=args.logo_margin_right,
+            bottom=args.logo_margin_bottom,
+            opacity=0
+        )
         .set_position(('right', 'bottom'))
     )
     adjusted_input_video = CompositeVideoClip([input_video, logo])
