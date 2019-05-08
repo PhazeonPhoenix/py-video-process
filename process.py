@@ -62,6 +62,11 @@ def debug_output():
         pass
 
     try:
+        print("Intro Video Size: {} x {}".format(iw, ih))
+    except NameError:
+        pass
+
+    try:
         print("Logo original size: {} x {}".format(logow, logoh))
     except NameError:
         pass
@@ -123,6 +128,15 @@ if output_exists == True and args.overwrite == False:
 input_video = VideoFileClip(args.input)
 w,h = input_video.size
 
+if intro_exists == True and intro_readable == True:
+    intro_video = VideoFileClip(args.intro)
+    iw,ih = intro_video.size
+    if w != iw or h != ih:
+        print()
+        print("The intro video '{}' is not the same size as the input video.".format(args.intro))
+        if args.debug:
+            debug_output()
+        sys.exit(1)
 if logo_exists == True and logo_readable == True:
     logo = ImageClip(args.logo)
     logow,logoh = logo.size
