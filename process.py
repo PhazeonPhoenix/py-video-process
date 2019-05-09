@@ -52,6 +52,16 @@ parser.add_argument("--overwrite",
     action="store_true",
     help="Overwrite output file if it exists."
     )
+parser.add_argument("--bitrate",
+    default=8000000,
+    type=int,
+    help="Output video bitrate."
+    )
+parser.add_argument("--audio_bitrate",
+    default=8000000,
+    type=int,
+    help="Output audio bitrate."
+    )
 parser.add_argument("-d", "--debug",
     action="store_true",
     help="Output debugging information."
@@ -80,6 +90,8 @@ def debug_output():
     print("Logo Margin Bottom: {}".format(args.logo_margin_bottom))
     print("Fade in duration: {}".format(args.fadein_duration))
     print("Fade out duration: {}".format(args.fadeout_duration))
+    print("Output Video Bitrate: {}".format(args.bitrate))
+    print("Output Audio Bitrate: {}".format(args.audio_bitrate))
     try:
         print("Input Video Size: {} x {}".format(w, h))
     except NameError:
