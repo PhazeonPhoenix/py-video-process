@@ -37,12 +37,32 @@ parser.add_argument("--logo-margin-right",
 parser.add_argument("--fadein-duration",
     default=.5,
     type=float,
-    help="Duration in seconds of the fadein effect applied to the input video. A value of 0 would disable it"
+    help="Duration in seconds of the fadein effect applied to the input video. A value of 0 would disable it."
     )
 parser.add_argument("--fadeout-duration",
     default=.5,
     type=float,
-    help="Duration in seconds of the fadeout effect applied to the input video. A value of 0 would disable it"
+    help="Duration in seconds of the fadeout effect applied to the input video. A value of 0 would disable it."
+    )
+parser.add_argument("--intro-fadein-duration",
+    default=.5,
+    type=float,
+    help="Duration in seconds of the fadein effect applied to the intro video. A value of 0 would disable it."
+    )
+parser.add_argument("--intro-fadeout-duration",
+    default=.5,
+    type=float,
+    help="Duration in seconds of the fadeout effect applied to the intro video. A value of 0 would disable it."
+    )
+parser.add_argument("--outro-fadein-duration",
+    default=.5,
+    type=float,
+    help="Duration in seconds of the fadein effect applied to the outro video. A value of 0 would disable it."
+    )
+parser.add_argument("--outro-fadeout-duration",
+    default=.5,
+    type=float,
+    help="Duration in seconds of the fadeout effect applied to the outro video. A value of 0 would disable it."
     )
 parser.add_argument("-o", "--out",
     help="The output filename. By default, this is the input file plus '.output'. Example 'input.output.mp4'"
@@ -175,7 +195,10 @@ input_video = VideoFileClip(args.input)
 w,h = input_video.size
 
 if intro_exists == True and intro_readable == True:
-    intro_video = VideoFileClip(args.intro)
+    intro_video = (VideoFileClip(args.intro)
+        .fadein(args.intro_fadein_duration)
+        .fadeout(args.intro_fadeout_duration)
+        )
     iw,ih = intro_video.size
     if w != iw or h != ih:
         print()
@@ -212,7 +235,10 @@ adjusted_input_video = (adjusted_input_video
 output_list.append(adjusted_input_video)
 
 if outro_exists == True and outro_readable == True:
-    outro_video = VideoFileClip(args.outro)
+    outro_video = (VideoFileClip(args.outro)
+        .fadein(args.outro_fadein_duration)
+        .fadeout(args.outro_fadeout_duration)
+        )
     ow,oh = outro_video.size
     if w != ow or h != oh:
         print()
@@ -226,8 +252,8 @@ final_clip = concatenate_videoclips(output_list);
 final_clip.write_videofile(output_filename,
     codec="libx264",
     audio_codec="libfdk_aac",
-    audio_bitrate=args.audio_bitrate,
-    bitrate=args.bitrate
+    audio_bitrate=str(args.audio_bitrate),
+    bitrate=str(args.bitrate)
     )
 
 if args.debug:
