@@ -116,6 +116,9 @@ def debug_output():
         print("Logo resized size: {} x {}".format(logorw, logorh))
     except NameError:
         pass
+
+    print(args)
+
 input_exists = os.path.exists(args.input)
 
 intro_exists = os.path.exists(args.intro)
@@ -220,6 +223,13 @@ if outro_exists == True and outro_readable == True:
     output_list.append(outro_video)
 
 final_clip = concatenate_videoclips(output_list);
+final_clip.write_videofile(output_filename,
+    codec="libx264",
+    audio_codec="libfdk_aac",
+    audio_bitrate=args.audio_bitrate,
+    bitrate=args.bitrate
+    )
+
 if args.debug:
     debug_output()
 
