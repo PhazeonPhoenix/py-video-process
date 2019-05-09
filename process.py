@@ -154,6 +154,8 @@ if output_exists == True and args.overwrite == False:
         debug_output()
     sys.exit(1)
 
+output_list = []
+
 input_video = VideoFileClip(args.input)
 w,h = input_video.size
 
@@ -166,6 +168,8 @@ if intro_exists == True and intro_readable == True:
         if args.debug:
             debug_output()
         sys.exit(1)
+    output_list.append(intro_video)
+
 if logo_exists == True and logo_readable == True:
     logo = ImageClip(args.logo)
     logow,logoh = logo.size
@@ -190,6 +194,7 @@ adjusted_input_video = (adjusted_input_video
     .fadein(args.fadein_duration)
     .fadeout(args.fadeout_duration)
     )
+output_list.append(adjusted_input_video)
 
 if outro_exists == True and outro_readable == True:
     outro_video = VideoFileClip(args.outro)
@@ -200,6 +205,9 @@ if outro_exists == True and outro_readable == True:
         if args.debug:
             debug_output()
         sys.exit(1)
+    output_list.append(outro_video)
+
+final_clip = concatenate_videoclips(output_list);
 if args.debug:
     debug_output()
 
