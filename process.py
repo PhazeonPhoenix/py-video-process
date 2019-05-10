@@ -138,7 +138,11 @@ def debug_output():
     except NameError:
         pass
 
-    print(args)
+def do_exit(ret=0):
+    if args.debug:
+        debug_output()
+    input("Press Enter to continue...")
+    sys.exit(ret)
 
 input_exists = os.path.exists(args.input)
 
@@ -179,16 +183,12 @@ logo_readable = os.access(args.logo, os.R_OK)
 if input_exists == False or input_readable == False:
     print()
     print("The input file '" + args.input + "' does not exist or is not readable. Please supply a readable input video.")
-    if args.debug:
-        debug_output()
-    sys.exit(1)
+    do_exit(ret=1)
 
 if output_exists == True and args.overwrite == False:
     print()
     print("The input file '" + output_filename + "' already exists. Use --overwrite, --output or -o to correct.")
-    if args.debug:
-        debug_output()
-    sys.exit(1)
+    do_exit(ret=1)
 
 output_list = []
 
@@ -204,9 +204,7 @@ if intro_exists == True and intro_readable == True:
     if w != iw or h != ih:
         print()
         print("The intro video '{}' is not the same size as the input video.".format(args.intro))
-        if args.debug:
-            debug_output()
-        sys.exit(1)
+        do_exit(ret=1)
     output_list.append(intro_video)
 
 if logo_exists == True and logo_readable == True:
@@ -244,9 +242,7 @@ if outro_exists == True and outro_readable == True:
     if w != ow or h != oh:
         print()
         print("The outro video '{}' is not the same size as the input video.".format(args.outro))
-        if args.debug:
-            debug_output()
-        sys.exit(1)
+        do_exit(ret=1)
     output_list.append(outro_video)
 
 final_clip = concatenate_videoclips(output_list);
@@ -257,7 +253,4 @@ final_clip.write_videofile(output_filename,
     bitrate=str(args.bitrate)
     )
 
-if args.debug:
-    debug_output()
-
-input("Press Enter to continue...")
+do_exit()
