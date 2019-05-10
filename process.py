@@ -248,9 +248,15 @@ if outro_exists == True and outro_readable == True:
 final_clip = concatenate_videoclips(output_list);
 final_clip.write_videofile(output_filename,
     codec="libx264",
-    audio_codec="libfdk_aac",
+    # codec="h264_nvenc", # NVidia hardware acceleration
+    # audio_codec="libfdk_aac", # Fraunhofer FDK 
+    audio_codec="aac",
     audio_bitrate=str(args.audio_bitrate),
-    bitrate=str(args.bitrate)
+    ffmpeg_params=[# '-crf', '20', 
+        '-b:v', str(args.bitrate), 
+        '-maxrate', str(args.bitrate), 
+        '-bufsize', str(args.bitrate * 2)
+        ]
     )
 
 do_exit()
