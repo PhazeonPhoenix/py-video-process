@@ -217,7 +217,7 @@ if logo_exists == True and logo_readable == True:
     logorh = math.ceil(logoh * ratio)
     logo = (ImageClip(args.logo)
         .set_duration(input_video.duration)
-        # .resize(logorw, logorh)
+        .resize(width=logorw, height=logorh)
         .margin(
             right=args.logo_margin_right,
             bottom=args.logo_margin_bottom,
