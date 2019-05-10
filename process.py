@@ -9,15 +9,15 @@ Process a video file, optionally adding a logo, an intro and an outro.
 parser.add_argument("input", help="The video file to process.")
 parser.add_argument("--intro",
     default="intro.mp4",
-    help="The intro video file to use. By default, 'intro.mp4' is used."
+    help="The intro video file to use. By default, 'intro.mp4' is used. You can disable with a value of 'none'."
     )
 parser.add_argument("--outro",
     default="outro.mp4",
-    help="The outro file to use. By default, 'outro.mp4' is used."
+    help="The outro file to use. By default, 'outro.mp4' is used. You can disable with a value of 'none'."
     )
 parser.add_argument("--logo",
     default="logo.png",
-    help="The outro file to use. By default, 'outro.mp4' is used."
+    help="The logo file to use. By default, 'logo.png' is used. You can disable with a value of 'none'."
     )
 parser.add_argument("--logo-size",
     default=128,
