@@ -73,12 +73,13 @@ parser.add_argument("--overwrite",
     help="Overwrite output file if it exists."
     )
 parser.add_argument("--bitrate",
-    default=8000000,
+    default=12000000, # for 60fps
+    # default=8000000, # for 30fps
     type=int,
     help="Output video bitrate."
     )
 parser.add_argument("--audio_bitrate",
-    default=8000000,
+    default=384000,
     type=int,
     help="Output audio bitrate."
     )
