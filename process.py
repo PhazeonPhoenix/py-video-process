@@ -246,17 +246,21 @@ if outro_exists == True and outro_readable == True:
     output_list.append(outro_video)
 
 final_clip = concatenate_videoclips(output_list);
-final_clip.write_videofile(output_filename,
-    codec="libx264",
-    # codec="h264_nvenc", # NVidia hardware acceleration
-    # audio_codec="libfdk_aac", # Fraunhofer FDK 
-    audio_codec="aac",
-    audio_bitrate=str(args.audio_bitrate),
-    ffmpeg_params=[# '-crf', '20', 
-        '-b:v', str(args.bitrate), 
-        '-maxrate', str(args.bitrate), 
-        '-bufsize', str(args.bitrate * 2)
-        ]
-    )
+
+keyargs = {}
+#keyargs['codec'] = 'libx264' # CPU encoding
+keyargs['codec'] = 'h264_nvenc' # NVidia hardware acceleration,
+keyargs['ffmpeg_params'] = [# '-crf', '20',
+    '-b:v', str(args.bitrate),
+    '-maxrate', str(args.bitrate),
+    '-bufsize', str(args.bitrate * 2),
+    ]
+keyargs['audio_codec'] = 'aac'
+# keyargs['audio_codec'] = 'libfdk_aac' # Fraunhofer FDK
+keyargs['audio_bitrate'] = str(args.audio_bitrate)
+# keyargs['audio_fps'] = '48000'
+# keyargs['preset'] = 'fast'
+
+final_clip.write_videofile(output_filename, **keyargs)
 
 do_exit()
