@@ -2,6 +2,8 @@ import sys
 import math
 from argparse import ArgumentParser
 from moviepy.editor import *
+from moviepy.config import get_setting, change_settings
+#change_settings({"FFMPEG_BINARY": r"F:\Python\ffmpeg.exe"})
 
 parser = ArgumentParser(description="""
 Process a video file, optionally adding a logo, an intro and an outro.
