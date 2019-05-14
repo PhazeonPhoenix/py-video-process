@@ -89,6 +89,10 @@ parser.add_argument("-d", "--debug",
     action="store_true",
     help="Output debugging information."
     )
+parser.add_argument("-aap", "--advanced-audio-processing",
+    action="store_true",
+    help="Enable advanced audio processing. Use if you know what it does."
+    )
 parser.add_argument("-n", "--dry-run",
     action="store_true",
     help="Do a dry run."
@@ -119,6 +123,7 @@ def debug_output():
     print("Fade out duration: {}".format(args.fadeout_duration))
     print("Output Video Bitrate: {}".format(args.bitrate))
     print("Output Audio Bitrate: {}".format(args.audio_bitrate))
+    print("Advanced Audio Processing: {}".format(args.advanced_audio_processing))
     try:
         print("Input Video Size: {} x {}".format(w, h))
     except NameError:
