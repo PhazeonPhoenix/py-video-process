@@ -1,6 +1,8 @@
 import sys
 import math
+import os
 from argparse import ArgumentParser
+from subprocess import run
 from moviepy.editor import *
 from moviepy.config import get_setting, change_settings
 #change_settings({"FFMPEG_BINARY": r"F:\Python\ffmpeg.exe"})
@@ -124,6 +126,11 @@ def debug_output():
     print("Output Video Bitrate: {}".format(args.bitrate))
     print("Output Audio Bitrate: {}".format(args.audio_bitrate))
     print("Advanced Audio Processing: {}".format(args.advanced_audio_processing))
+    try:
+        print("Advanced Audio Output File: {}".format(audio_filename))
+    except NameError:
+        pass
+
     try:
         print("Input Video Size: {} x {}".format(w, h))
     except NameError:
@@ -258,6 +265,77 @@ if outro_exists == True and outro_readable == True:
 
 final_clip = concatenate_videoclips(output_list);
 
+if args.advanced_audio_processing:
+    audio_filename = output_subname + '.wvf_snd.m4a'
+    temp_name = 'intermediate{}.wvf_snd.ts'
+    common_args = ['-y', '-loglevel', 'error', '-c:a', 'copy', '-vn', '-f', 'mpegts']
+    audio_input_names = []
+    audio_count = 0
+    def exit_wrap(ret=0):
+        audio_input_names.append(audio_filename)
+        for input in audio_input_names:
+            try:
+                os.remove(input)
+            except OSError:
+                pass
+        do_exit(ret)
+
+    if intro_exists == True and intro_readable == True:
+        audio_count = audio_count + 1
+        realized = temp_name.format(audio_count)
+        audio_input_names.append(realized)
+        to_run = [get_setting("FFMPEG_BINARY"), '-i', args.intro] + common_args + [realized]
+        if args.dry_run:
+            print(" ".join(to_run))
+        else:
+            out = run(to_run)
+            if out.returncode != 0:
+                print("An error occurred during advanced audio processing")
+                exit_wrap(ret=1)
+
+    audio_count = audio_count + 1
+    realized = temp_name.format(audio_count)
+    audio_input_names.append(realized)
+    to_run = [get_setting("FFMPEG_BINARY"), '-i', args.input] + common_args + [realized]
+    if args.dry_run:
+        print(" ".join(to_run))
+    else:
+        out = run(to_run)
+        if out.returncode != 0:
+                print("An error occurred during advanced audio processing")
+                exit_wrap(ret=1)
+
+    if outro_exists == True and outro_readable == True:
+        audio_count = audio_count + 1
+        realized = temp_name.format(audio_count)
+        audio_input_names.append(realized)
+        to_run = [get_setting("FFMPEG_BINARY"), '-i', args.outro] + common_args + [realized]
+        if args.dry_run:
+            print(" ".join(to_run))
+        else:
+            out = run(to_run)
+            if out.returncode != 0:
+                print("An error occurred during advanced audio processing")
+                exit_wrap(ret=1)
+
+    to_run = [get_setting("FFMPEG_BINARY"),
+        '-i', '"concat:{}"'.format("|".join(audio_input_names)),
+        '-c:a', 'copy',
+        '-vn', '-y',
+        '-loglevel', 'error',
+         audio_filename
+        ]
+    if args.dry_run:
+        print(" ".join(to_run))
+    else:
+        # for some reason the concat argument doesn't work unless the string
+        # is joined before passing to run.
+        out = run(" ".join(to_run))
+        # out = run(to_run)
+        if out.returncode != 0:
+            print("An error occurred during advanced audio processing")
+            exit_wrap(ret=1)
+
 keyargs = {}
 #keyargs['codec'] = 'libx264' # CPU encoding
 keyargs['codec'] = 'h264_nvenc' # NVidia hardware acceleration,
@@ -266,13 +344,19 @@ keyargs['ffmpeg_params'] = [# '-crf', '20',
     '-maxrate', str(args.bitrate),
     '-bufsize', str(args.bitrate * 2),
     ]
-keyargs['audio_codec'] = 'aac'
-# keyargs['audio_codec'] = 'libfdk_aac' # Fraunhofer FDK
-keyargs['audio_bitrate'] = str(args.audio_bitrate)
-# keyargs['audio_fps'] = '48000'
 # keyargs['preset'] = 'fast'
+if args.advanced_audio_processing:
+    keyargs['audio'] = audio_filename
+else:
+    keyargs['audio_codec'] = 'aac'
+    # keyargs['audio_codec'] = 'libfdk_aac' # Fraunhofer FDK
+    keyargs['audio_bitrate'] = str(args.audio_bitrate)
+    # keyargs['audio_fps'] = '48000'
 
 if not args.dry_run:
     final_clip.write_videofile(output_filename, **keyargs)
 
-do_exit()
+if args.advanced_audio_processing == True:
+    exit_wrap()
+else:
+    do_exit()
