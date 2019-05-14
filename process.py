@@ -89,6 +89,10 @@ parser.add_argument("-d", "--debug",
     action="store_true",
     help="Output debugging information."
     )
+parser.add_argument("-n", "--dry-run",
+    action="store_true",
+    help="Do a dry run."
+    )
 
 args = parser.parse_args()
 
@@ -263,6 +267,7 @@ keyargs['audio_bitrate'] = str(args.audio_bitrate)
 # keyargs['audio_fps'] = '48000'
 # keyargs['preset'] = 'fast'
 
-final_clip.write_videofile(output_filename, **keyargs)
+if not args.dry_run:
+    final_clip.write_videofile(output_filename, **keyargs)
 
 do_exit()
